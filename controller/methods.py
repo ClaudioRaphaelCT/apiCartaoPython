@@ -1,5 +1,5 @@
 from service.connection import Connection
-from model.CartaoModel import ItemCreate
+from model.CartaoModel import ItemCreate, ItemsDelete
 
 class Metodos:
     @staticmethod
@@ -51,9 +51,9 @@ class Metodos:
         return {"quantidade total de uso ": count}
     
     @classmethod
-    def delete_id(cls, item_id: int):
+    def delete_ids(cls, items: ItemsDelete):
         conn, cursor = cls._get_cursor()
-        cursor.execute("DELETE FROM CARTAO WHERE ID = ?", (item_id))
+        cursor.execute("DELETE FROM CARTAO WHERE ID IN ({})".format(','.join('?', * len(items.ids))), tuple(items.ids)), 
         conn.commit()
         conn.close()
-        return{"response ": f"Registro ID {item_id} DELETADO"}
+        return {"message": f"Registros com IDs {', '.join(map(str, items.ids))} deletados com sucesso"}

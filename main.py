@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from model.CartaoModel import ItemCreate
+from model.CartaoModel import ItemCreate,ItemsDelete
 from controller.methods import Metodos
 
 app = FastAPI()
@@ -18,4 +18,8 @@ def setItem(item: ItemCreate):
 @app.get('/quantidade')
 def obter_quantidade():
    return Metodos.count()
+
+@app.delete("/delete")
+def delete_items(items: ItemsDelete):
+   return Metodos.delete_ids(items)
 
